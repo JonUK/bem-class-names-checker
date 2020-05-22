@@ -1,5 +1,5 @@
-import BemClassNameParser from '@/bemClassNameParser';
-import BemPartType from "@/enums/bemPartType";
+import BemClassNameParser from '@/utils/bemClassNameParser';
+import BemPartType from '@/enums/bemPartType';
 
 describe('BemClassNameParser parses', () => {
   it('empty string correctly', () => {

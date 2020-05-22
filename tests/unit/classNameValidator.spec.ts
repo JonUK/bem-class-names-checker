@@ -1,11 +1,5 @@
-import ClassNameValidator from '@/classNameValidator';
-import MessageType from "@/enums/messageType";
-
-// TODO: Test if element name contains block name: card__card-title
-// TODO: Common HTML tags when the .prefix has not been used: input[type=submit]
-// TODO: Nested classes: .form .search  header .form
-
-
+import ClassNameValidator from '@/utils/classNameValidator';
+import MessageType from '@/enums/messageType';
 
 describe('ClassNameValidator', () => {
   it('returns critical message when string is empty', () => {

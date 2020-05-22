@@ -9,7 +9,14 @@ import BemPartType from "@/models/bemPartType";
         <label for="className" class="app__input-label">
           CSS class name
         </label>
-        <input v-model="className" id="className" type="text" class="app__input" autofocus autocomplete="off">
+        <input
+          v-model="className"
+          id="className"
+          type="text"
+          class="app__input"
+          autofocus
+          autocomplete="off"
+          spellcheck="false">
       </div>
     </div>
 
@@ -17,40 +24,40 @@ import BemPartType from "@/models/bemPartType";
 
     <display-messages :messages="messages"></display-messages>
 
+    <site-footer></site-footer>
+
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import ClassNameValidator from '@/classNameValidator';
-  import BemClassNameParser from '@/bemClassNameParser';
-  import LocalStorageHelper from '@/utils/localStorageHelper';
+  import ClassNameValidator from '@/utils/classNameValidator';
+  import BemPartsValidator from '@/utils/bemPartsValidator';
+  import BemClassNameParser from '@/utils/bemClassNameParser';
 
   import Message from '@/models/message';
   import MessageType from "@/enums/messageType";
-  import BemPartType from './enums/bemPartType';
   import BemPart from '@/models/bemPart';
 
   import SiteHeader from '@/components/SiteHeader.vue';
+  import SiteFooter from '@/components/SiteFooter.vue';
   import BemParts from '@/components/BemParts.vue';
   import DisplayMessages from '@/components/DisplayMessages.vue';
+
 
 @Component({
   components: {
     SiteHeader,
+    SiteFooter,
     BemParts,
     DisplayMessages
   },
 })
 export default class App extends Vue {
-  className = LocalStorageHelper.getClassName() || 'product-card__title--active';
-  // className = '!';
+  className = 'product-card__title--active';
 
   messages: Message[] = [];
   bemParts: BemPart[] = [];
-
-  // Make the enum available for the view to use
-  BemPartType = BemPartType;
 
   @Watch('className', { immediate: true } )
   onClassNameChanged(value: string) {
@@ -58,13 +65,17 @@ export default class App extends Vue {
   }
 
   private processClassName(className: string): void {
-    LocalStorageHelper.setClassName(className);
-
     const messages = ClassNameValidator.validate(className);
     const containsCriticalIssues = messages.some(x => x.messageType === MessageType.critical);
 
+    this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className);
+    console.dir(this.bemParts);
+
+    if (!containsCriticalIssues) {
+      messages.push(...BemPartsValidator.validate(this.bemParts));
+    }
+
     this.messages = messages;
-    this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className)
   }
 }
 </script>
