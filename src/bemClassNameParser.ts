@@ -1,6 +1,13 @@
 export default class BemClassNameParser {
   static parse(className: string): BemModel {
 
+    className = className.trim();
+
+    // If the there's a dot prefix, strip it out as so it's not part of the class name
+    if (className && className.substring(0, 1) === '.') {
+      className = className.substring(1);
+    }
+
     // --------------------------------------------------------------------------------
 
     const separatorsRegExp = /(__|--)/;

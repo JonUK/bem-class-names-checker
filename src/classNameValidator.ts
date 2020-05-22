@@ -27,6 +27,8 @@ export default class ClassNameValidator {
     const startsWithVendorPrefixes = /^[-|_]/;
     const startsWithSomethingElse = /^[^a-z]/i;
 
+
+    // Check the start of the class name
     if (className.substring(0, 1) === '#') {
       validationErrors.push(ValidationIssue.createForError('A CSS class name cannot start with "#". BEM uses class names only and not ID selectors.'));
     } else if (startsWith2Hyphens.test(className)) {
@@ -41,18 +43,27 @@ export default class ClassNameValidator {
       validationErrors.push(ValidationIssue.createForCritical('The CSS class name does not start with a letter (a-z)'));
     }
 
-    if (className.length < 2) {
-      validationErrors.push(ValidationIssue.createForCritical('CSS class names must be at least 2 characters long.'));
-    }
-
     const containsUppercaseCharacters = /[A-Z]/;
     if (containsUppercaseCharacters.test(className)) {
       validationErrors.push(ValidationIssue.createForError('The CSS class name contains uppercase characters. BEM class names should only user lowercase characters.'));
     }
 
-    const wordsSeparatedBySpaces = /\w\s\w/i;
+    if (className.length < 2) {
+      validationErrors.push(ValidationIssue.createForCritical('CSS class names must be at least 2 characters long.'));
+    }
+
+    const wordsSeparatedBySpaces = /\s/;
     if (wordsSeparatedBySpaces.test(className)) {
       validationErrors.push(ValidationIssue.createForCritical('The CSS class name contains spaces which is invalid'));
+    } else if (className.length > 2) {
+      // Check the rest of the class name after the first 2 characters
+      const restOfClassName = className.substring(2);
+      console.log('restOfClassName', restOfClassName);
+
+      const remainingContainsValidCharacters = /^[_\-a-zA-Z0-9:]+$/;
+      if (!remainingContainsValidCharacters.test(restOfClassName)) {
+        validationErrors.push(ValidationIssue.createForCritical('The CSS class name contains invalid characters. After the first 2 characters, only numbers, letters, hyphens or underscores are allowed'));
+      }
     }
 
     const wordsSeparatedByUnderscores = /[a-z]_[a-z]/i;

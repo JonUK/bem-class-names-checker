@@ -1,6 +1,10 @@
 import ClassNameValidator from '@/classNameValidator';
 
 // TODO: Test if element name contains block name: card__card-title
+// TODO: Common HTML tags when the .prefix has not been used: input[type=submit]
+// TODO: Nested classes: .form .search  header .form
+
+
 
 describe('ClassNameValidator', () => {
   it('returns an error when string is empty', () => {
@@ -151,6 +155,26 @@ describe('ClassNameValidator', () => {
     expect(validationIssues).toHaveLength(1);
     expect(validationIssues[0].message).toContain('contains spaces');
   });
+
+  it('returns errors when uppercase words are separated by a space', () => {
+    const className = 'TEST NAME';
+
+    const validationIssues = ClassNameValidator.validate(className);
+
+    expect(validationIssues).toHaveLength(2);
+    expect(validationIssues[0].message).toContain('contains uppercase characters');
+    expect(validationIssues[1].message).toContain('contains spaces');
+  });
+
+  it('returns no error when hover separator exists', () => {
+    const className = 'card:hover';
+
+    const validationIssues = ClassNameValidator.validate(className);
+
+    expect(validationIssues).toHaveLength(0);
+  });
+
+
 
 
 
