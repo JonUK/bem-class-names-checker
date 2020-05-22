@@ -1,110 +1,170 @@
 import BemClassNameParser from '@/bemClassNameParser';
+import BemPartType from "@/enums/bemPartType";
 
 describe('BemClassNameParser parses', () => {
   it('empty string correctly', () => {
     const className = '';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toBeNull();
-    expect(bemModel.elements).toHaveLength(0);
-    expect(bemModel.modifiers).toHaveLength(0);
+    // Assert
+    expect(bemParts).toHaveLength(1);
+
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('');
   });
 
   it('lowercase block correctly', () => {
     const className = 'card';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(0);
-    expect(bemModel.modifiers).toHaveLength(0);
+    // Assert
+    expect(bemParts).toHaveLength(1);
+
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
   });
 
   it('uppercase block correctly', () => {
     const className = 'CARD';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('CARD');
-    expect(bemModel.elements).toHaveLength(0);
-    expect(bemModel.modifiers).toHaveLength(0);
+    // Assert
+    expect(bemParts).toHaveLength(1);
+
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('CARD');
   });
 
   it('block and element correctly', () => {
     const className = 'card__title';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(1);
-    expect(bemModel.elements[0]).toEqual('title');
-    expect(bemModel.modifiers).toHaveLength(0);
+    // Assert
+    expect(bemParts).toHaveLength(2);
+
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const element = bemParts[1];
+    expect(element.partType).toEqual(BemPartType.element);
+    expect(element.value).toEqual('title');
   });
 
   it('block and modifier correctly', () => {
     const className = 'card--disabled';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(0);
-    expect(bemModel.modifiers).toHaveLength(1);
-    expect(bemModel.modifiers[0]).toEqual('disabled');
+    // Assert
+    expect(bemParts).toHaveLength(2);
+
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const modifier = bemParts[1];
+    expect(modifier.partType).toEqual(BemPartType.modifier);
+    expect(modifier.value).toEqual('disabled');
   });
 
   it('block, element and modifier correctly', () => {
     const className = 'card__title--active';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(1);
-    expect(bemModel.elements[0]).toEqual('title');
+    // Assert
+    expect(bemParts).toHaveLength(3);
 
-    expect(bemModel.modifiers).toHaveLength(1);
-    expect(bemModel.modifiers[0]).toEqual('active');
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const element = bemParts[1];
+    expect(element.partType).toEqual(BemPartType.element);
+    expect(element.value).toEqual('title');
+
+    const modifier = bemParts[2];
+    expect(modifier.partType).toEqual(BemPartType.modifier);
+    expect(modifier.value).toEqual('active');
   });
 
   it('block, element 1 and element 2 correctly', () => {
     const className = 'card__element1__element2';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(2);
-    expect(bemModel.elements[0]).toEqual('element1');
-    expect(bemModel.elements[1]).toEqual('element2');
+    // Assert
+    expect(bemParts).toHaveLength(3);
 
-    expect(bemModel.modifiers).toHaveLength(0);
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const element1 = bemParts[1];
+    expect(element1.partType).toEqual(BemPartType.element);
+    expect(element1.value).toEqual('element1');
+
+    const element2 = bemParts[2];
+    expect(element2.partType).toEqual(BemPartType.element);
+    expect(element2.value).toEqual('element2');
   });
 
   it('block, modifier 1 and modifier 2 correctly', () => {
     const className = 'card--modifier1--modifier2';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(0);
+    // Assert
+    expect(bemParts).toHaveLength(3);
 
-    expect(bemModel.modifiers).toHaveLength(2);
-    expect(bemModel.modifiers[0]).toEqual('modifier1');
-    expect(bemModel.modifiers[1]).toEqual('modifier2');
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const modifier1 = bemParts[1];
+    expect(modifier1.partType).toEqual(BemPartType.modifier);
+    expect(modifier1.value).toEqual('modifier1');
+
+    const modifier2 = bemParts[2];
+    expect(modifier2.partType).toEqual(BemPartType.modifier);
+    expect(modifier2.value).toEqual('modifier2');
   });
 
   it('block, element 1, modifier 1 and element 2, modifier 2 correctly', () => {
     const className = 'card__element1--modifier1__element2--modifier2';
 
-    const bemModel = BemClassNameParser.parse(className);
+    const bemParts = BemClassNameParser.parse(className);
 
-    expect(bemModel.block).toEqual('card');
-    expect(bemModel.elements).toHaveLength(2);
-    expect(bemModel.elements[0]).toEqual('element1');
-    expect(bemModel.elements[1]).toEqual('element2');
+    // Assert
+    expect(bemParts).toHaveLength(5);
 
-    expect(bemModel.modifiers).toHaveLength(2);
-    expect(bemModel.modifiers[0]).toEqual('modifier1');
-    expect(bemModel.modifiers[1]).toEqual('modifier2');
+    const block = bemParts[0];
+    expect(block.partType).toEqual(BemPartType.block);
+    expect(block.value).toEqual('card');
+
+    const element1 = bemParts[1];
+    expect(element1.partType).toEqual(BemPartType.element);
+    expect(element1.value).toEqual('element1');
+
+    const modifier1 = bemParts[2];
+    expect(modifier1.partType).toEqual(BemPartType.modifier);
+    expect(modifier1.value).toEqual('modifier1');
+
+    const element2 = bemParts[3];
+    expect(element2.partType).toEqual(BemPartType.element);
+    expect(element2.value).toEqual('element2');
+
+    const modifier2 = bemParts[4];
+    expect(modifier2.partType).toEqual(BemPartType.modifier);
+    expect(modifier2.value).toEqual('modifier2');
   });
 });
 

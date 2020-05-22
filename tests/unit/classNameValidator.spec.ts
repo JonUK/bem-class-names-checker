@@ -1,4 +1,5 @@
 import ClassNameValidator from '@/classNameValidator';
+import MessageType from "@/enums/messageType";
 
 // TODO: Test if element name contains block name: card__card-title
 // TODO: Common HTML tags when the .prefix has not been used: input[type=submit]
@@ -7,175 +8,187 @@ import ClassNameValidator from '@/classNameValidator';
 
 
 describe('ClassNameValidator', () => {
-  it('returns an error when string is empty', () => {
+  it('returns critical message when string is empty', () => {
     const className = '';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toEqual('No CSS class name has been entered.');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toEqual('No CSS class name has been entered.');
   });
 
-  it('returns an error when string is just a dot', () => {
+  it('returns critical message when string is just a dot', () => {
     const className = '.';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toEqual('No CSS class name has been entered.');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toEqual('No CSS class name has been entered.');
   });
 
-  it('returns an error when class name is only 1 character long', () => {
+  it('returns critical message when class name is only 1 character long', () => {
     const className = 'a';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toEndWith('at least 2 characters long.');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toEndWith('at least 2 characters long.');
   });
 
-  it('returns errors when class name begins with #', () => {
+  it('returns error message when class name begins with #', () => {
     const className = '#test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toEndWith('BEM uses class names only and not ID selectors.');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.error);
+    expect(messages[0].text).toEndWith('BEM uses class names only and not ID selectors.');
   });
 
-  it('returns no errors when class name dot prefix is used', () => {
+  it('returns no messages when class name dot prefix is used', () => {
     const className = '.test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
-  it('returns no errors when class name dot prefix is not used', () => {
+  it('returns no messages when class name dot prefix is not used', () => {
     const className = 'test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
-  it('returns no errors when class name contains leading space', () => {
+  it('returns no messages when class name contains leading space', () => {
     const className = ' test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
-  it('returns no errors when class name contains trailing space', () => {
+  it('returns no messages when class name contains trailing space', () => {
     const className = 'test ';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
-  it('returns an error when class name starts with a number', () => {
+  it('returns critical message when class name starts with a number', () => {
     const className = '1test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toStartWith('The CSS class name starts with a number');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toStartWith('The CSS class name starts with a number');
   });
 
-  it('returns an error when class name starts with a hyphen', () => {
+  it('returns warning message when class name starts with a hyphen', () => {
     const className = '-test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toContain('starts with a hyphen or underscore');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.warning);
+    expect(messages[0].text).toContain('starts with a hyphen or underscore');
   });
 
-  it('returns an error when class name starts with a underscore', () => {
+  it('returns critical message when class name starts with a underscore', () => {
     const className = '_test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toContain('starts with a hyphen or underscore');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.warning);
+    expect(messages[0].text).toContain('starts with a hyphen or underscore');
   });
 
-  it('returns an error when class name starts with other characters', () => {
+  it('returns critical message when class name starts with other characters', () => {
     const className = '!test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toStartWith('The CSS class name does not start with');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toStartWith('The CSS class name does not start with');
   });
 
-  it('returns an error when class name starts with 2 hyphens', () => {
+  it('returns critical message when class name starts with 2 hyphens', () => {
     const className = '--test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toStartWith('The CSS class name starts with 2 hyphens');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toStartWith('The CSS class name starts with 2 hyphens');
   });
 
-  it('returns an error when class name starts with 2 hyphens', () => {
+  it('returns critical message when class name starts with hyphen and number', () => {
     const className = '-1test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toStartWith('The CSS class name starts with hyphen and a number');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toStartWith('The CSS class name starts with hyphen and a number');
   });
 
-  it('returns an error when class contains uppercase characters', () => {
+  it('returns warning message when class contains uppercase characters', () => {
     const className = 'Test';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toContain('contains uppercase characters');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.warning);
+    expect(messages[0].text).toContain('contains uppercase characters');
   });
 
-  it('returns an error when words are separated by an underscore', () => {
+  it('returns warning message when words are separated by an underscore', () => {
     const className = 'test_name';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toStartWith('Words have been separated by underscores.');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.warning);
+    expect(messages[0].text).toStartWith('Words have been separated by underscores.');
   });
 
-  it('returns an error when words are separated by a space', () => {
+  it('returns critical message when words are separated by a space', () => {
     const className = 'test name';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(1);
-    expect(validationIssues[0].message).toContain('contains spaces');
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toContain('contains spaces');
   });
 
-  it('returns errors when uppercase words are separated by a space', () => {
+  it('returns warning and critical messages when uppercase words are separated by a space', () => {
     const className = 'TEST NAME';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(2);
-    expect(validationIssues[0].message).toContain('contains uppercase characters');
-    expect(validationIssues[1].message).toContain('contains spaces');
+    expect(messages).toHaveLength(2);
+    expect(messages[0].messageType).toEqual(MessageType.critical);
+    expect(messages[0].text).toContain('contains spaces');
+    expect(messages[1].messageType).toEqual(MessageType.warning);
+    expect(messages[1].text).toContain('contains uppercase characters');
   });
 
   it('returns no error when hover separator exists', () => {
     const className = 'card:hover';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
-
-
-
 
 
 
@@ -184,25 +197,25 @@ describe('ClassNameValidator', () => {
   it('returns no errors for BEM block & element example', () => {
     const className = 'card__title';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
   it('returns no errors for BEM block & modifier example', () => {
     const className = 'card--selected';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
   it('returns no errors for BEM block, element & modifier example', () => {
     const className = 'card--title-highlighted';
 
-    const validationIssues = ClassNameValidator.validate(className);
+    const messages = ClassNameValidator.validate(className);
 
-    expect(validationIssues).toHaveLength(0);
+    expect(messages).toHaveLength(0);
   });
 
 
@@ -211,11 +224,11 @@ describe('ClassNameValidator', () => {
   // it('returns errors when class name begins with a number', () => {
   //   const className = '1';
   //
-  //   const validationIssues = ClassNameValidator.validate(className);
+  //   const messages = ClassNameValidator.validate(className);
   //
-  //   expect(validationIssues).toHaveLength(2);
-  //   expect(validationIssues[0].message).toEndWith('at least 2 characters long.');
-  //   expect(validationIssues[1].message).toEqual('The CSS class starts with a number which is invalid.');
+  //   expect(messages).toHaveLength(2);
+  //   expect(messages[0].message).toEndWith('at least 2 characters long.');
+  //   expect(messages[1].message).toEqual('The CSS class starts with a number which is invalid.');
   // });
 });
 

@@ -1,4 +1,4 @@
-import BemPartType from '@/models/bemPartType';
+import BemPartType from '@/enums/bemPartType';
 
 export default interface BemPart {
   id: string;

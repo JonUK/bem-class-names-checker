@@ -2,48 +2,27 @@ import BemPartType from "@/models/bemPartType";
 <template>
   <div id="app">
 
-    <div style="display: flex; flex-direction: column; align-items: center; xxxbackground-color: cornsilk;">
-
-      <div style="xxxbackground-color: aqua">
-        <h1 style="margin-bottom: 0;">BEM Class Name Checker</h1>
-        <p style="margin-top: 0; font-size: 1.2rem">Check for common BEM class name issues</p>
+    <div class="app__main-container">
+      <div>
+        <site-header :class-name="className"></site-header>
 
         <label for="className" style="display: block; font-weight: bold;">CSS class name</label>
         <input v-model="className" id="className" type="text" style="width: 100%">
-
-
       </div>
-
     </div>
 
-    <br />
-    <br />
+    <bem-parts :bem-parts="bemParts"></bem-parts>
 
-    <div style="display: flex; justify-content: center; margin-right: 1rem;">
-      <template v-for="part in bemParts">
-
-        <bem-part-separator
-          :bem-part-type="part.partType"
-          :key="part.id + '-separator'"
-        ></bem-part-separator>
-
-        <bem-part-value
-          :bem-part-type="part.partType"
-          :value="part.value"
-          :key="part.id + '-value'"
-        ></bem-part-value>
-
-      </template>
-    </div>
-
-    <pre>
-      <code>
-        {{ JSON.stringify(bemModel) }}
-      </code>
-    </pre>
+<!--    <pre>-->
+<!--      <code>-->
+<!--        {{ JSON.stringify(bemParts) }}-->
+<!--      </code>-->
+<!--    </pre>-->
 
     <ul>
-      <li v-for="issue in validationIssues" :key="issue.message">{{ issue.message }}</li>
+      <li v-for="message in messages" :key="message.text">
+        {{ message.messageType }} - {{ message.text }}
+      </li>
     </ul>
 
   </div>
@@ -51,35 +30,27 @@ import BemPartType from "@/models/bemPartType";
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { v4 as uuidv4 } from 'uuid';
-
   import ClassNameValidator from '@/classNameValidator';
   import BemClassNameParser from '@/bemClassNameParser';
-  import ValidationIssue from '@/models/validationIssue';
-  import ValidationErrorSeverity from "@/models/validationErrorSeverity";
-  import BemPartType from './models/bemPartType';
+  import Message from '@/models/message';
+  import MessageType from "@/enums/messageType";
+  import BemPartType from './enums/bemPartType';
   import BemPart from '@/models/bemPart';
 
-  import BemPartSeparator from '@/components/BemPartSeparator.vue';
-  import BemPartValue from '@/components/BemPartValue.vue';
+  import SiteHeader from '@/components/SiteHeader.vue';
+  import BemParts from '@/components/BemParts.vue';
 
-  @Component({
+@Component({
   components: {
-    BemPartSeparator,
-    BemPartValue
+    SiteHeader,
+    BemParts
   },
 })
 export default class App extends Vue {
   className = 'card__title--active';
 
-  validationIssues: ValidationIssue[] = [];
-  bemModel: BemModel | null = null;
-
-  bemParts: BemPart[] = [
-    { id: uuidv4(), partType: BemPartType.block, value: 'card' },
-    { id: uuidv4(), partType: BemPartType.element, value: 'title' },
-    { id: uuidv4(), partType: BemPartType.modifier, value: 'active' }
-  ];
+  messages: Message[] = [];
+  bemParts: BemPart[] = [];
 
   // Make the enum available for the view to use
   BemPartType = BemPartType;
@@ -90,11 +61,11 @@ export default class App extends Vue {
   }
 
   private processClassName(className: string): void {
-    const validationIssues = ClassNameValidator.validate(className);
-    const containsCriticalIssues = validationIssues.some(x => x.severity === ValidationErrorSeverity.Critical);
+    const messages = ClassNameValidator.validate(className);
+    const containsCriticalIssues = messages.some(x => x.messageType === MessageType.critical);
 
-    this.validationIssues = validationIssues;
-    this.bemModel = containsCriticalIssues ? null : BemClassNameParser.parse(className)
+    this.messages = messages;
+    this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className)
   }
 
 }
@@ -103,6 +74,14 @@ export default class App extends Vue {
 <style lang="scss">
   html {
     box-sizing: border-box;
+
+    @media screen and (min-width: 500px) {
+      font-size: 110%;
+    }
+
+    @media screen and (min-width: 550px) {
+      font-size: 120%;
+    }
   }
 
   *, *:before, *:after {
@@ -110,11 +89,27 @@ export default class App extends Vue {
   }
 
   body {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 1rem;
+
+    font-family: 'Roboto', Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #000000d6;
   }
+
+  .app__main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /*.header--container {*/
+  /*  display: flex;*/
+  /*  flex-direction: column;*/
+  /*  align-items: center;*/
+  /*}*/
+
 
   input {
     padding: 0.6rem;
@@ -126,14 +121,14 @@ export default class App extends Vue {
   }
 
   #app {
-    margin-top: 10vh;
+    //margin-top: 10vh;
     // text-align: center;
     // color: #2c3e50;
 
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
 </style>
