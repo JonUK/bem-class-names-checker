@@ -23,12 +23,12 @@ export default class BemPartSeparator extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   .bem-part-separator__container {
     display: flex;
     flex-direction: column;
-    margin: 0.5rem 0.3rem;
+    margin: 0.8rem 0.3rem;
   }
   .bem-part-separator__text {
     margin-top: 1.75rem;

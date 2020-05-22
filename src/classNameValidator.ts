@@ -68,7 +68,7 @@ export default class ClassNameValidator {
 
     const containsUppercaseCharacters = /[A-Z]/;
     if (containsUppercaseCharacters.test(className)) {
-      messages.push(Message.createForWarning('The CSS class name contains uppercase characters. BEM class names should only user lowercase characters.'));
+      messages.push(Message.createForWarning('The CSS class name contains uppercase characters. BEM class names should only use lowercase characters.'));
     }
 
     return messages;

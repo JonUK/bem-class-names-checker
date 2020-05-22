@@ -1,6 +1,6 @@
 <template>
 
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-right: 1rem; margin-top: 2rem;">
+  <div class="bem-parts">
     <template v-for="part in bemParts">
 
       <bem-part-separator
@@ -36,6 +36,12 @@ export default class BemParts extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+  .bem-parts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: 1rem;
+    margin-top: 2rem;
+  }
 </style>

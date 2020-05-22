@@ -36,7 +36,7 @@ export default class BemPartValue extends Vue {
   .bem-part-value__container {
     display: flex;
     flex-direction: column;
-    margin: 0.5rem 0.3rem;
+    margin: 0.8rem 0.3rem;
   }
 
   .bem-part-value__label {

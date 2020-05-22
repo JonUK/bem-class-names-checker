@@ -1,36 +1,64 @@
 <template>
 
-  <div style="display: flex; flex-direction: column;">
-    <div style="padding: 0 0.2rem; margin-bottom: 0.5rem; text-align: center; border-top: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999;">
-      <span style="position: relative; top: -0.7rem; font-size: 0.85rem; background-color: white; padding: 0 0.2rem;">
+  <li :class="'display-message__' + message.messageType" class="display-message">
+    <strong>
 
-        <template v-if="bemPartType === BemPartType.block">Block</template>
-        <template v-else-if="bemPartType === BemPartType.element">Element</template>
-        <template v-else>Modifier</template>
+      <template v-if="message.messageType === MessageType.success">
+        Success
+      </template>
+      <template v-else-if="message.messageType === MessageType.warning">
+        Warning
+      </template>
+      <template v-else>
+        Error
+      </template>
 
-      </span>
-    </div>
-    <div style="font-family: 'Space Mono', monospace; font-size: 2rem; text-align: center; color: #AA5D00;">
-      {{ value }}
-    </div>
-  </div>
+    </strong>
+    <br />
+
+    {{ message.text }}
+  </li>
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import BemPartType from '@/enums/bemPartType';
+import Message from '@/models/message';
+import MessageType from '@/enums/messageType';
 
 @Component
-export default class BemPartValue extends Vue {
-  @Prop({ type: String, required: true }) bemPartType!: BemPartType;
-  @Prop({ type: String, required: true,  }) value!: string;
+export default class DisplayMessage extends Vue {
+  @Prop({ type: Object, required: true }) message!: Message;
 
   // Make the enum available for the view to use
-  BemPartType = BemPartType;
+  MessageType = MessageType;
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+  .display-message {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+  .display-message__critical,
+  .display-message__error {
+    border-color: #ECA3AB;
+    background-color: #FFF2F2;
+  }
+
+  .display-message__warning {
+    border-color: #EEBA88;
+    background-color: #FFF5EA;
+  }
+
+  .display-message__success {
+    border-color: #AEC590;
+    background-color: #F4F8EE;
+  }
 
 </style>

@@ -31,7 +31,7 @@ export default class SiteHeader extends Vue {
   .site-header__lead {
     margin-top: 0;
     margin-bottom: 2rem;
-    font-size: 1.2rem
+    font-size: 1.1rem
   }
 
   .site-header__input {

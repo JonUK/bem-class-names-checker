@@ -6,24 +6,16 @@ import BemPartType from "@/models/bemPartType";
       <div>
         <site-header :class-name="className"></site-header>
 
-        <label for="className" style="display: block; font-weight: bold;">CSS class name</label>
-        <input v-model="className" id="className" type="text" style="width: 100%">
+        <label for="className" class="app__input-label">
+          CSS class name
+        </label>
+        <input v-model="className" id="className" type="text" class="app__input">
       </div>
     </div>
 
     <bem-parts :bem-parts="bemParts"></bem-parts>
 
-<!--    <pre>-->
-<!--      <code>-->
-<!--        {{ JSON.stringify(bemParts) }}-->
-<!--      </code>-->
-<!--    </pre>-->
-
-    <ul>
-      <li v-for="message in messages" :key="message.text">
-        {{ message.messageType }} - {{ message.text }}
-      </li>
-    </ul>
+    <display-messages :messages="messages"></display-messages>
 
   </div>
 </template>
@@ -32,6 +24,7 @@ import BemPartType from "@/models/bemPartType";
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import ClassNameValidator from '@/classNameValidator';
   import BemClassNameParser from '@/bemClassNameParser';
+
   import Message from '@/models/message';
   import MessageType from "@/enums/messageType";
   import BemPartType from './enums/bemPartType';
@@ -39,15 +32,18 @@ import BemPartType from "@/models/bemPartType";
 
   import SiteHeader from '@/components/SiteHeader.vue';
   import BemParts from '@/components/BemParts.vue';
+  import DisplayMessages from '@/components/DisplayMessages.vue';
 
 @Component({
   components: {
     SiteHeader,
-    BemParts
+    BemParts,
+    DisplayMessages
   },
 })
 export default class App extends Vue {
-  className = 'card__title--active';
+  // className = 'card__title--active';
+  className = '!';
 
   messages: Message[] = [];
   bemParts: BemPart[] = [];
@@ -82,6 +78,10 @@ export default class App extends Vue {
     @media screen and (min-width: 550px) {
       font-size: 120%;
     }
+
+    @media screen and (min-height: 500px) {
+      padding-top: 10vh;
+    }
   }
 
   *, *:before, *:after {
@@ -95,7 +95,7 @@ export default class App extends Vue {
     font-family: 'Roboto', Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #000000d6;
+    color: #333333;
   }
 
   .app__main-container {
@@ -104,31 +104,20 @@ export default class App extends Vue {
     align-items: center;
   }
 
-  /*.header--container {*/
-  /*  display: flex;*/
-  /*  flex-direction: column;*/
-  /*  align-items: center;*/
-  /*}*/
+  .app__input-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: bold;
+  }
 
-
-  input {
+  .app__input {
     padding: 0.6rem;
-    background-color: #F5F6F8;
-    border-radius: 4px;
     border: 1px solid #C8CACC;
-
+    border-radius: 4px;
+    width: 100%;
+    background-color: #F5F6F8;
     font-size: inherit;
   }
 
-  #app {
-    //margin-top: 10vh;
-    // text-align: center;
-    // color: #2c3e50;
-
-  }
-
-  h1 {
-    font-size: 1.8rem;
-  }
-
 </style>
+

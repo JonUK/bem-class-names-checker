@@ -1,4 +1,5 @@
-import MessageType from "@/enums/messageType";
+import { v4 as uuidv4 } from 'uuid';
+import MessageType from '@/enums/messageType';
 
 export default class Message {
 
@@ -19,5 +20,8 @@ export default class Message {
   }
 
   private constructor(public text: string, public messageType: MessageType) {
+    this.id = uuidv4();
   }
+
+  id: string;
 }
