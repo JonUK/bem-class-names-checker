@@ -44,7 +44,6 @@ import BemPartType from "@/models/bemPartType";
   import BemParts from '@/components/BemParts.vue';
   import DisplayMessages from '@/components/DisplayMessages.vue';
 
-
 @Component({
   components: {
     SiteHeader,
@@ -54,7 +53,7 @@ import BemPartType from "@/models/bemPartType";
   },
 })
 export default class App extends Vue {
-  className = 'product-card__title--active';
+  className = 'card__title--active';
 
   messages: Message[] = [];
   bemParts: BemPart[] = [];
@@ -69,7 +68,6 @@ export default class App extends Vue {
     const containsCriticalIssues = messages.some(x => x.messageType === MessageType.critical);
 
     this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className);
-    console.dir(this.bemParts);
 
     if (!containsCriticalIssues) {
       messages.push(...BemPartsValidator.validate(this.bemParts));

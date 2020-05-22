@@ -53,7 +53,6 @@ export default class ClassNameValidator {
     } else if (className.length > 2) {
       // Check the rest of the class name after the first 2 characters
       const restOfClassName = className.substring(2);
-      console.log('restOfClassName', restOfClassName);
 
       const remainingContainsValidCharacters = /^[_\-a-zA-Z0-9:]+$/;
       if (!remainingContainsValidCharacters.test(restOfClassName)) {
