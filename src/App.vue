@@ -9,7 +9,7 @@ import BemPartType from "@/models/bemPartType";
         <label for="className" class="app__input-label">
           CSS class name
         </label>
-        <input v-model="className" id="className" type="text" class="app__input">
+        <input v-model="className" id="className" type="text" class="app__input" autofocus autocomplete="off">
       </div>
     </div>
 
@@ -24,6 +24,7 @@ import BemPartType from "@/models/bemPartType";
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import ClassNameValidator from '@/classNameValidator';
   import BemClassNameParser from '@/bemClassNameParser';
+  import LocalStorageHelper from '@/utils/localStorageHelper';
 
   import Message from '@/models/message';
   import MessageType from "@/enums/messageType";
@@ -42,8 +43,8 @@ import BemPartType from "@/models/bemPartType";
   },
 })
 export default class App extends Vue {
-  // className = 'card__title--active';
-  className = '!';
+  className = LocalStorageHelper.getClassName() || 'product-card__title--active';
+  // className = '!';
 
   messages: Message[] = [];
   bemParts: BemPart[] = [];
@@ -57,13 +58,14 @@ export default class App extends Vue {
   }
 
   private processClassName(className: string): void {
+    LocalStorageHelper.setClassName(className);
+
     const messages = ClassNameValidator.validate(className);
     const containsCriticalIssues = messages.some(x => x.messageType === MessageType.critical);
 
     this.messages = messages;
     this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className)
   }
-
 }
 </script>
 
@@ -79,7 +81,7 @@ export default class App extends Vue {
       font-size: 120%;
     }
 
-    @media screen and (min-height: 500px) {
+    @media screen and (min-height: 500px) and (min-width: 500px) {
       padding-top: 10vh;
     }
   }
