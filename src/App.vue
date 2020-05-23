@@ -1,3 +1,4 @@
+import ResultType from "@/enums/resultType";
 import BemPartType from "@/models/bemPartType";
 <template>
   <div id="app">
@@ -17,6 +18,15 @@ import BemPartType from "@/models/bemPartType";
           autofocus
           autocomplete="off"
           spellcheck="false">
+
+        <br />
+
+        <label>
+          CSS String
+          <textarea v-model="cssString" cols="40" rows="5"></textarea>
+        </label>
+        
+
       </div>
     </div>
 
@@ -30,21 +40,25 @@ import BemPartType from "@/models/bemPartType";
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import {Component, Vue, Watch} from 'vue-property-decorator';
+  import css, {ParserError, Rule, Stylesheet} from 'css';
+
   import ClassNameValidator from '@/utils/classNameValidator';
   import BemPartsValidator from '@/utils/bemPartsValidator';
   import BemClassNameParser from '@/utils/bemClassNameParser';
 
   import Message from '@/models/message';
-  import MessageType from "@/enums/messageType";
+  import MessageType from '@/enums/messageType';
   import BemPart from '@/models/bemPart';
 
   import SiteHeader from '@/components/SiteHeader.vue';
   import SiteFooter from '@/components/SiteFooter.vue';
   import BemParts from '@/components/BemParts.vue';
   import DisplayMessages from '@/components/DisplayMessages.vue';
+  import CssSelector from '@/models/cssSelector';
+  import ResultType from '@/enums/resultType';
 
-@Component({
+  @Component({
   components: {
     SiteHeader,
     SiteFooter,
@@ -54,6 +68,18 @@ import BemPartType from "@/models/bemPartType";
 })
 export default class App extends Vue {
   className = 'card__title--active';
+  cssString = `
+    @import 'custom.css';
+
+    .card__title--active {
+      border-color: blue;
+    }
+
+    .test1 .test2 {
+    }
+  `;
+
+  cssParserError: ParserError | null = null;
 
   messages: Message[] = [];
   bemParts: BemPart[] = [];
@@ -61,6 +87,11 @@ export default class App extends Vue {
   @Watch('className', { immediate: true } )
   onClassNameChanged(value: string) {
     this.processClassName(value);
+  }
+
+  @Watch('cssString', { immediate: true } )
+  onCssStringChanged(value: string) {
+    this.processCssString(value);
   }
 
   private processClassName(className: string): void {
@@ -75,6 +106,73 @@ export default class App extends Vue {
 
     this.messages = messages;
   }
+
+  private processCssString(cssString: string): void {
+
+    let ast: Stylesheet;
+
+    try {
+      // Try and get the Abstract Syntax Tree (AST) for the CSS string
+      ast = css.parse(cssString);
+    } catch (e) {
+      this.cssParserError = e;
+      return;
+    }
+
+    if (!ast.stylesheet) {
+      throw new Error('The CSS contains no rules');
+    }
+
+    debugger;
+
+    const rules: Rule[] = ast.stylesheet.rules.filter(x => (x as Rule).selectors !== undefined);
+    const cssSelectors: CssSelector[] = [];
+
+    for (const rule of rules) {
+      for (const selector of rule.selectors ?? []) {
+        cssSelectors.push({
+          selector: selector,
+          line: rule.position?.start?.line ?? 0,
+          resultType: ResultType.error,
+          messages: [Message.createForError('Test')]
+        })
+      }
+    }
+
+    // const cssSelectors2: CssSelector[] = rules
+    //  .map(rule => rule.selectors ?? [].map(selector => ({
+    //    selector: selector,
+    //    line: rule.position?.start?.line ?? 0,
+    //    resultType: ResultType.error,
+    //    messages: [Message.createForError('Test')]
+    //  })));
+
+     // .map((selector, rule) => ({
+     //   selector: selector,
+     //   line: rule.position?.start?.line ?? 0,
+     //   resultType: ResultType.error,
+     //   messages: [Message.createForError('Test')]
+     // }));
+
+
+    // const cssSelectors: CssSelector[] = rules.map(x => {
+    //   selector
+    // } as CssSelector);
+
+    debugger;
+
+    console.dir(cssSelectors);
+
+
+
+
+  }
+
+  // private isRule(rule: Rule | Comment | AtRule): rule is Rule {
+  //   return (rule as Rule).selectors !== undefined;
+  // }
+
+
 }
 </script>
 

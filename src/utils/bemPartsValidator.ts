@@ -51,8 +51,6 @@ export default class BemPartsValidator {
       messages.push(Message.createForError(`There are ${modifiers.length} modifiers. BEM class names can have at most 1 modifier.`))
     }
 
-    debugger;
-
     if (elements.length === 1 && modifiers.length === 1) {
       if (bemParts[1].partType === BemPartType.modifier) {
         messages.push(Message.createForError('The element appears after the modifier which is invalid.'))
