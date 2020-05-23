@@ -14,7 +14,7 @@ describe('BemPartsValidator', () => {
     expect(messages).toHaveLength(0);
   });
 
-  it('returns error message when 2 elements exist', () => {
+  it('returns warning message when 2 elements exist', () => {
     const bemParts: BemPart[] = [
       { id: 'Id1', partType: BemPartType.block, value: 'block' },
       { id: 'Id2', partType: BemPartType.element, value: 'element1' },
@@ -24,8 +24,23 @@ describe('BemPartsValidator', () => {
     const messages = BemPartsValidator.validate(bemParts);
 
     expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.warning);
+    expect(messages[0].text).toStartWith('There is a nested element');
+  });
+
+  it('returns error message when 3 elements exist', () => {
+    const bemParts: BemPart[] = [
+      { id: 'Id1', partType: BemPartType.block, value: 'block' },
+      { id: 'Id2', partType: BemPartType.element, value: 'element1' },
+      { id: 'Id3', partType: BemPartType.element, value: 'element2' },
+      { id: 'Id$', partType: BemPartType.element, value: 'element3' }
+    ];
+
+    const messages = BemPartsValidator.validate(bemParts);
+
+    expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.error);
-    expect(messages[0].text).toStartWith('There are 2 elements');
+    expect(messages[0].text).toStartWith('There are 3 elements');
   });
 
   it('returns error message when 2 modifiers exist', () => {

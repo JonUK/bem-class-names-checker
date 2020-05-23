@@ -27,8 +27,10 @@ export default class BemPartsValidator {
         messages.push(Message.createForWarning(`The element contains the block name "${block}".`));
       }
 
+    } else if (elements.length == 2) {
+      messages.push(Message.createForWarning(`There is a nested element. BEM class names typically have at most 1 element.`))
     } else if (elements.length > 1) {
-      messages.push(Message.createForError(`There are ${elements.length} elements. BEM class names can have at most 1 element.`))
+      messages.push(Message.createForError(`There are ${elements.length} elements.`))
     }
 
     const modifiers = bemParts.filter(x => x.partType === BemPartType.modifier);
