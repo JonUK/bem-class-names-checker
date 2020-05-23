@@ -91,7 +91,7 @@ export default class App extends Vue {
     }
 
     @media screen and (min-height: 500px) and (min-width: 500px) {
-      padding-top: 10vh;
+      padding-top: 1.5rem;
     }
   }
 
