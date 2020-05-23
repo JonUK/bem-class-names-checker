@@ -23,7 +23,7 @@ export default class BemPartsValidator {
         messages.push(Message.createForWarning(`The element ends with a hyphen or an underscore.`));
       }
 
-      if (element.includes(block)) {
+      if (element.match(new RegExp(block, 'i'))) {
         messages.push(Message.createForWarning(`The element contains the block name "${block}".`));
       }
 
@@ -43,7 +43,7 @@ export default class BemPartsValidator {
         messages.push(Message.createForWarning(`The modifier ends with a hyphen or an underscore.`));
       }
 
-      if (modifier.includes(block)) {
+      if (modifier.match(new RegExp(block, 'i'))) {
         messages.push(Message.createForWarning(`The modifier contains the block name "${block}".`));
       }
 
@@ -51,9 +51,14 @@ export default class BemPartsValidator {
       messages.push(Message.createForError(`There are ${modifiers.length} modifiers. BEM class names can have at most 1 modifier.`))
     }
 
+    debugger;
+
+    if (elements.length === 1 && modifiers.length === 1) {
+      if (bemParts[1].partType === BemPartType.modifier) {
+        messages.push(Message.createForError('The element appears after the modifier which is invalid.'))
+      }
+    }
+
     return messages;
   }
-
-
-
 }
