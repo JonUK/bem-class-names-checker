@@ -24,13 +24,23 @@ export default class SiteHeader extends Vue {
 
   .site-header__title {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 
   .site-header__lead {
     margin-top: 0;
     margin-bottom: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1.04rem;
     font-weight: 300;
+  }
+
+  @media screen and (min-width: 25rem) {
+    .site-header__title {
+      font-size: 1.8rem;
+    }
+
+    .site-header__lead {
+      font-size: 1.1rem;
+    }
   }
 </style>
