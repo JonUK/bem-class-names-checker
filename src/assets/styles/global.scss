@@ -8,12 +8,17 @@ html {
 
 body {
   margin: 0;
-  padding: 1.25rem; // As we have a scrollable textarea and table, allow padding to scroll whole page
+  padding: 0.6rem;
 
   font-family: 'Roboto', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #333333;
+
+  @media screen and (min-width: 30rem) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 
   @media screen and (min-width: 50rem) {
     padding-left: 5vw;
