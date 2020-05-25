@@ -1,134 +1,192 @@
-import BemPartType from "@/models/bemPartType";
 <template>
   <div id="app">
 
+    <site-header></site-header>
+
     <div class="app__main-container">
-      <div>
-        <site-header :class-name="className"></site-header>
 
-        <label for="className" class="app__input-label">
-          CSS class name
-        </label>
-        <input
-          v-model="className"
-          id="className"
-          type="text"
-          class="app__input"
-          autofocus
-          autocomplete="off"
-          spellcheck="false">
-      </div>
+      <main>
+
+        <stylesheet-input
+          :stylesheet-string.sync="stylesheetString"
+          :stylesheet-parser-error="stylesheetParserError"
+        ></stylesheet-input>
+
+        <br/>
+        <br/>
+
+        <selector-message-list :selector-messages="selectorMessages"></selector-message-list>
+
+      </main>
+
+      <site-footer></site-footer>
+
     </div>
-
-    <bem-parts :bem-parts="bemParts"></bem-parts>
-
-    <display-messages :messages="messages"></display-messages>
-
-    <site-footer></site-footer>
 
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import ClassNameValidator from '@/utils/classNameValidator';
-  import BemPartsValidator from '@/utils/bemPartsValidator';
-  import BemClassNameParser from '@/utils/bemClassNameParser';
+  import css, { ParserError, Rule, Stylesheet } from 'css';
 
+  import ClassNameValidator from '@/utils/classNameValidator';
+  import BemClassNameParser from '@/utils/bemClassNameParser';
+  import BemPartsValidator from '@/utils/bemPartsValidator';
+
+  import SelectorMessage from '@/models/selectorMessage';
   import Message from '@/models/message';
-  import MessageType from "@/enums/messageType";
-  import BemPart from '@/models/bemPart';
+  import MessageType from '@/enums/messageType';
 
   import SiteHeader from '@/components/SiteHeader.vue';
   import SiteFooter from '@/components/SiteFooter.vue';
-  import BemParts from '@/components/BemParts.vue';
-  import DisplayMessages from '@/components/DisplayMessages.vue';
+  import StylesheetInput from '@/components/StylesheetInput.vue';
+  import SelectorMessageList from '@/components/SelectorMessageList.vue';
 
-@Component({
-  components: {
-    SiteHeader,
-    SiteFooter,
-    BemParts,
-    DisplayMessages
-  },
-})
-export default class App extends Vue {
-  className = 'card__title--active';
+  import '@/assets/styles/global.scss';
 
-  messages: Message[] = [];
-  bemParts: BemPart[] = [];
+  @Component({
+    components: {
+      SiteHeader,
+      SiteFooter,
+      StylesheetInput,
+      SelectorMessageList
+    },
+  })
+  export default class App extends Vue {
+    stylesheetString = `/* Incorrect BEM Class Names */
 
-  @Watch('className', { immediate: true } )
-  onClassNameChanged(value: string) {
-    this.processClassName(value);
-  }
+.site-header--dark__logo {
+}
 
-  private processClassName(className: string): void {
-    const messages = ClassNameValidator.validate(className);
-    const containsCriticalIssues = messages.some(x => x.messageType === MessageType.critical);
+.Card__Title: {
+}
 
-    this.bemParts = containsCriticalIssues ? [] : BemClassNameParser.parse(className);
+.shopping-list__item__image {
+}
 
-    if (!containsCriticalIssues) {
-      messages.push(...BemPartsValidator.validate(this.bemParts));
+.site_header__logo {
+}
+
+
+/* Correct BEM Class Name */
+
+.card__title--active {
+}
+
+
+/* Non Class Selectors */
+
+body {
+}
+
+#comments {
+}
+`;
+
+    stylesheetParserError: ParserError | null = null;
+    selectorMessages: SelectorMessage[] = [];
+
+    @Watch('stylesheetString', {immediate: true})
+    onCssStringChanged(value: string) {
+      this.processStylesheetString(value);
     }
 
-    this.messages = messages;
+    private processStylesheetString(cssString: string): void {
+
+      this.stylesheetParserError = null;
+      let ast: Stylesheet;
+
+      try {
+        // Try and get the Abstract Syntax Tree (AST) for the CSS string
+        ast = css.parse(cssString);
+      } catch (e) {
+        const parserError: ParserError = e;
+
+        //debugger;
+
+        this.stylesheetParserError = parserError;
+        this.selectorMessages = [{
+          selector: 'Unknown',
+          line: parserError.line ?? 0,
+          message: 'There is an error with the stylesheet. Reason: ' + parserError.reason ?? '',
+          messageType: MessageType.critical
+        }];
+
+        return;
+      }
+
+      if (!ast.stylesheet) {
+        throw new Error('The CSS contains no rules');
+      }
+
+      const rules: Rule[] = ast.stylesheet.rules.filter(x => (x as Rule).selectors !== undefined);
+      const selectorMessages: SelectorMessage[] = [];
+
+      for (const rule of rules) {
+        for (const selector of rule.selectors ?? []) {
+
+          const line = rule.position?.start?.line ?? 0;
+
+          if (selector.startsWith('#')) {
+            selectorMessages.push({
+              selector: selector,
+              line: line,
+              message: 'This is an ID selector.',
+              messageType: MessageType.info
+            });
+
+            continue;
+          }
+
+          if (!selector.startsWith('.')) {
+            selectorMessages.push({
+              selector: selector,
+              line: line,
+              message: 'This is an element type selector.',
+              messageType: MessageType.info
+            });
+
+            continue;
+          }
+
+
+          const messages: Message[] = ClassNameValidator.validate(selector);
+
+          if (!messages.length) {
+            const bemParts = BemClassNameParser.parse(selector);
+            messages.push(...BemPartsValidator.validate(bemParts));
+          }
+
+          if (!messages.length) {
+            selectorMessages.push({
+              selector: selector,
+              line: line,
+              message: 'This is a valid BEM class name',
+              messageType: MessageType.success
+            })
+          }
+
+          for (const message of messages) {
+            selectorMessages.push({
+              selector: selector,
+              line: line,
+              message: message.text,
+              messageType: message.messageType
+            })
+          }
+        }
+      }
+
+      this.selectorMessages = selectorMessages;
+    }
   }
-}
 </script>
 
 <style lang="scss">
-  html {
-    box-sizing: border-box;
-
-    @media screen and (min-width: 500px) {
-      font-size: 110%;
-    }
-
-    @media screen and (min-width: 550px) {
-      font-size: 120%;
-    }
-
-    @media screen and (min-height: 500px) and (min-width: 500px) {
-      padding-top: 1.5rem;
-    }
-  }
-
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-
-  body {
-    margin: 0;
-    padding: 1rem;
-
-    font-family: 'Roboto', Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #333333;
-  }
-
   .app__main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0 auto;
+    max-width: 65rem;
   }
-
-  .app__input-label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-weight: bold;
-  }
-
-  .app__input {
-    padding: 0.6rem;
-    border: 1px solid #C8CACC;
-    border-radius: 4px;
-    width: 100%;
-    background-color: #F5F6F8;
-    font-size: inherit;
-  }
-
 </style>
 

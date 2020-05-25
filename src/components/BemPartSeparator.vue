@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import BemPartType from "@/enums/bemPartType";
+import BemPartType from '@/enums/bemPartType';
 
 @Component
 export default class BemPartSeparator extends Vue {
@@ -32,7 +32,7 @@ export default class BemPartSeparator extends Vue {
   }
   .bem-part-separator__text {
     margin-top: 1.75rem;
-    font-family: 'Space Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 1.2rem;
     text-align: center;
     color: #AA5D00;

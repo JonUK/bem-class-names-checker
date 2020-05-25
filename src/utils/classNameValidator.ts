@@ -49,7 +49,7 @@ export default class ClassNameValidator {
 
     const wordsSeparatedBySpaces = /\s/;
     if (wordsSeparatedBySpaces.test(className)) {
-      messages.push(Message.createForCritical('The CSS class name contains spaces which is invalid'));
+      messages.push(Message.createForCritical('The CSS class name contains one or more spaces which is invalid'));
     } else if (className.length > 2) {
       // Check the rest of the class name after the first 2 characters
       const restOfClassName = className.substring(2);

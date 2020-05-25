@@ -1,0 +1,43 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 1.25rem; // As we have a scrollable textarea and table, allow padding to scroll whole page
+
+  font-family: 'Roboto', Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333333;
+
+  @media screen and (min-width: 50rem) {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+}
+
+input,
+textarea {
+  padding: 0.6rem;
+  border: 1px solid #C8CACC;
+  border-radius: 4px;
+  width: 100%;
+  background-color: #F5F6F8;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: inherit;
+}
+
+th {
+  text-align: left;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: bold;
+}

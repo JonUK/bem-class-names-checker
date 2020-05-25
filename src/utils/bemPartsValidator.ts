@@ -1,5 +1,5 @@
 import Message from '@/models/message';
-import BemPart from "@/models/bemPart";
+import BemPart from '@/models/bemPart';
 import BemPartType from '@/enums/bemPartType';
 
 // --------------------------------------------------------------------------------
@@ -19,8 +19,12 @@ export default class BemPartsValidator {
       const element = elements[0].value;
       const endsWithHyphenOrUnderscore = element.endsWith('-') || element.endsWith('_');
 
+      if (!element) {
+        messages.push(Message.createForError('An element separator has been used but no element entered.'));
+      }
+
       if (endsWithHyphenOrUnderscore) {
-        messages.push(Message.createForWarning(`The element ends with a hyphen or an underscore.`));
+        messages.push(Message.createForWarning('The element ends with a hyphen or an underscore.'));
       }
 
       if (element.match(new RegExp(block, 'i'))) {
@@ -28,7 +32,9 @@ export default class BemPartsValidator {
       }
 
     } else if (elements.length == 2) {
-      messages.push(Message.createForWarning(`There is a nested element. BEM class names typically have at most 1 element.`))
+      messages.push(Message.createForWarning(
+        `The element "${elements[1].value}" is nested in the element "${elements[0].value}". 
+        BEM class names typically have at most 1 element.`))
     } else if (elements.length > 1) {
       messages.push(Message.createForError(`There are ${elements.length} elements.`))
     }
@@ -38,6 +44,10 @@ export default class BemPartsValidator {
     if (modifiers.length === 1) {
       const modifier = modifiers[0].value;
       const endsWithHyphenOrUnderscore = modifier.endsWith('-') || modifier.endsWith('_');
+
+      if (!modifier) {
+        messages.push(Message.createForError('An element separator has been used but no modifier entered.'));
+      }
 
       if (endsWithHyphenOrUnderscore) {
         messages.push(Message.createForWarning(`The modifier ends with a hyphen or an underscore.`));
@@ -51,11 +61,9 @@ export default class BemPartsValidator {
       messages.push(Message.createForError(`There are ${modifiers.length} modifiers. BEM class names can have at most 1 modifier.`))
     }
 
-    debugger;
-
     if (elements.length === 1 && modifiers.length === 1) {
       if (bemParts[1].partType === BemPartType.modifier) {
-        messages.push(Message.createForError('The element appears after the modifier which is invalid.'))
+        messages.push(Message.createForError(`The element "${bemParts[2].value}" appears after the modifier "${bemParts[1].value}" which is invalid.`))
       }
     }
 

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import BemPart from "@/models/bemPart";
-import BemPartType from "@/enums/bemPartType";
+import BemPart from '@/models/bemPart';
+import BemPartType from '@/enums/bemPartType';
 
 // --------------------------------------------------------------------------------
 

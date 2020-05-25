@@ -161,7 +161,7 @@ describe('ClassNameValidator', () => {
 
     expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.critical);
-    expect(messages[0].text).toContain('contains spaces');
+    expect(messages[0].text).toContain('contains one or more spaces');
   });
 
   it('returns warning and critical messages when uppercase words are separated by a space', () => {
@@ -171,7 +171,7 @@ describe('ClassNameValidator', () => {
 
     expect(messages).toHaveLength(2);
     expect(messages[0].messageType).toEqual(MessageType.critical);
-    expect(messages[0].text).toContain('contains spaces');
+    expect(messages[0].text).toContain('contains one or more spaces');
     expect(messages[1].messageType).toEqual(MessageType.warning);
     expect(messages[1].text).toContain('contains uppercase characters');
   });
@@ -183,10 +183,6 @@ describe('ClassNameValidator', () => {
 
     expect(messages).toHaveLength(0);
   });
-
-
-
-
 
   it('returns no errors for BEM block & element example', () => {
     const className = 'card__title';
@@ -211,18 +207,5 @@ describe('ClassNameValidator', () => {
 
     expect(messages).toHaveLength(0);
   });
-
-
-
-
-  // it('returns errors when class name begins with a number', () => {
-  //   const className = '1';
-  //
-  //   const messages = ClassNameValidator.validate(className);
-  //
-  //   expect(messages).toHaveLength(2);
-  //   expect(messages[0].message).toEndWith('at least 2 characters long.');
-  //   expect(messages[1].message).toEqual('The CSS class starts with a number which is invalid.');
-  // });
 });
 

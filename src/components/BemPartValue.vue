@@ -57,7 +57,7 @@ export default class BemPartValue extends Vue {
   }
 
   .bem-part-value__text {
-    font-family: 'Space Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 1.2rem;
     text-align: center;
     color: #AA5D00;

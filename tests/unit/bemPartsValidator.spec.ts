@@ -25,7 +25,7 @@ describe('BemPartsValidator', () => {
 
     expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.warning);
-    expect(messages[0].text).toStartWith('There is a nested element');
+    expect(messages[0].text).toStartWith('The element "element2" is nested in the element "element1"');
   });
 
   it('returns error message when 3 elements exist', () => {
@@ -57,6 +57,19 @@ describe('BemPartsValidator', () => {
     expect(messages[0].text).toStartWith('There are 2 modifiers');
   });
 
+  it('returns warning message when an element is missing', () => {
+    const bemParts: BemPart[] = [
+      { id: 'Id1', partType: BemPartType.block, value: 'block' },
+      { id: 'Id2', partType: BemPartType.element, value: '' }
+    ];
+
+    const messages = BemPartsValidator.validate(bemParts);
+
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.error);
+    expect(messages[0].text).toEndWith('no element entered.');
+  });
+
   it('returns warning message when an element ends with a hyphen', () => {
     const bemParts: BemPart[] = [
       { id: 'Id1', partType: BemPartType.block, value: 'block' },
@@ -81,6 +94,19 @@ describe('BemPartsValidator', () => {
     expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.warning);
     expect(messages[0].text).toEqual('The element ends with a hyphen or an underscore.');
+  });
+
+  it('returns warning message when a modifier is missing', () => {
+    const bemParts: BemPart[] = [
+      { id: 'Id1', partType: BemPartType.block, value: 'block' },
+      { id: 'Id2', partType: BemPartType.modifier, value: '' }
+    ];
+
+    const messages = BemPartsValidator.validate(bemParts);
+
+    expect(messages).toHaveLength(1);
+    expect(messages[0].messageType).toEqual(MessageType.error);
+    expect(messages[0].text).toEndWith('no modifier entered.');
   });
 
   it('returns warning message when a modifier ends with a hyphen', () => {
@@ -218,7 +244,7 @@ describe('BemPartsValidator', () => {
 
     expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.error);
-    expect(messages[0].text).toEqual('The element appears after the modifier which is invalid.');
+    expect(messages[0].text).toEqual('The element "element" appears after the modifier "modifier" which is invalid.');
   });
 });
 
