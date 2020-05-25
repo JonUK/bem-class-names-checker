@@ -2,10 +2,10 @@
 
   <div>
 
-    <strong class="label">Messages ({{ selectorMessages.length }})</strong>
+    <strong id="messages" class="label">Messages ({{ selectorMessages.length }})</strong>
 
-    <div class="selector-message-list">
-      <table id="customers" class="selector-message-list__table">
+    <div class="selector-message-list" tabindex="0" aria-labelledby="messages">
+      <table class="selector-message-list__table">
         <thead>
         <tr>
           <th width="4%"></th>
@@ -68,7 +68,7 @@
     position: sticky;
     top: 0;
     padding: 12px 8px;
-    background-color: #3D9AD2;
+    background-color: #0F79CF;
     color: white;
   }
 

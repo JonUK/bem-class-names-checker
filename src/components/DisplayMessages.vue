@@ -1,4 +1,3 @@
-import MessageType from "@/enums/messageType";
 <template>
 
   <div class="display-messages__container">
@@ -16,18 +15,15 @@ import MessageType from "@/enums/messageType";
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import Message from "@/models/message";
+  import Message from '@/models/message';
   import MessageType from '@/enums/messageType';
-  import DisplayMessage from "@/components/DisplayMessage.vue";
+  import DisplayMessage from '@/components/DisplayMessage.vue';
 
   @Component({
   components: {DisplayMessage}
 })
 export default class DisplayMessages extends Vue {
   @Prop({ type: Array, required: true }) messages!: Message[];
-
-  // Make the enum available for the view to use
-  MessageType = MessageType;
 
   get issues(): Message[] {
     return this.messages.filter(x =>
