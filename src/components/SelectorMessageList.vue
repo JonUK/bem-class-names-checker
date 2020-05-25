@@ -97,6 +97,7 @@
 
   .selector-message-list__table th {
     border: 0;
+    font-weight: 500;
   }
 
 </style>
