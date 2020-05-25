@@ -44,19 +44,8 @@
 <style lang="scss">
   .stylesheet-input__input {
     height: 38vh;
-    // min-height: 15rem;
-    // max-height: 25rem;
-    font-size: 0.85rem;
     border: 2px solid #D2D2D2;
     resize: vertical;
-
-    @media screen and (min-width: 30rem) {
-      font-size: 0.9rem;
-    }
-
-    @media screen and (min-width: 48rem) {
-      font-size: 1rem;
-    }
   }
 
   .stylesheet-input__input--error {

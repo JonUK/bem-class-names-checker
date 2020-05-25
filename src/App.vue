@@ -59,7 +59,7 @@
 .site-header--dark__logo {
 }
 
-.Card__Title: {
+.Card__Title {
 }
 
 .shopping-list__item__image {

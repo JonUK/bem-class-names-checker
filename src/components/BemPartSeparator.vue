@@ -30,9 +30,10 @@ export default class BemPartSeparator extends Vue {
     flex-direction: column;
     margin: 0.8rem 0.3rem;
   }
+
   .bem-part-separator__text {
     margin-top: 1.75rem;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Inconsolata', monospace;
     font-size: 1.2rem;
     text-align: center;
     color: #AA5D00;
