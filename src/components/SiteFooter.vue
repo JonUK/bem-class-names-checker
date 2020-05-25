@@ -29,6 +29,7 @@ export default class SiteFooter extends Vue {
  .site__heading {
    margin-top: 2rem;
    margin-bottom: 0.5rem;
-   font-size: 1.4rem
+   font-size: 1.4rem;
+   font-weight: 500;
  }
 </style>
