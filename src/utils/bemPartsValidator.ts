@@ -33,7 +33,7 @@ export default class BemPartsValidator {
 
     } else if (elements.length == 2) {
       messages.push(Message.createForWarning(
-        `The element "${elements[1].value}" is nested in the element "${elements[0].value}". 
+        `The element "${elements[1].value}" is nested under the element "${elements[0].value}". 
         BEM class names typically have at most 1 element.`))
     } else if (elements.length > 1) {
       messages.push(Message.createForError(`There are ${elements.length} elements.`))
