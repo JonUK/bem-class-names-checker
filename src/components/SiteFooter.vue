@@ -22,7 +22,7 @@ export default class SiteFooter extends Vue {
 
 <style lang="scss">
  .site__footer {
-   margin-top: 3.5rem;
+   margin-top: 2.8rem;
    font-size: 16px
  }
 

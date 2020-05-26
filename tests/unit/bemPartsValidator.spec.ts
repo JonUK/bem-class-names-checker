@@ -25,7 +25,7 @@ describe('BemPartsValidator', () => {
 
     expect(messages).toHaveLength(1);
     expect(messages[0].messageType).toEqual(MessageType.warning);
-    expect(messages[0].text).toStartWith('The element "element2" is nested in the element "element1"');
+    expect(messages[0].text).toStartWith('The element "element2" is nested under the element "element1"');
   });
 
   it('returns error message when 3 elements exist', () => {
