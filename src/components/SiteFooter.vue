@@ -39,7 +39,7 @@ export default class SiteFooter extends Vue {
  .site-footer {
    display: flex;
    flex-wrap: wrap;
-   margin-top: 1rem;
+   margin-top: 2.5rem;
  }
 
  .site-footer__section {
