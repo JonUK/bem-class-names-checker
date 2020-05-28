@@ -103,8 +103,6 @@ body {
       } catch (e) {
         const parserError: ParserError = e;
 
-        //debugger;
-
         this.stylesheetParserError = parserError;
         this.selectorMessages = [{
           selector: 'Unknown',
@@ -149,7 +147,6 @@ body {
 
             continue;
           }
-
 
           const messages: Message[] = ClassNameValidator.validate(selector);
 
