@@ -1,9 +1,10 @@
 # bem-class-names-checker  
  
- ## Demo
- https://bem-class-names-checker.netlify.app/
- 
- ![Preview of how the site looks](https://keepinguptodate.com/pages/2020/05/10-bem-class-names-checker.png)
+## Demo
+https://bem-class-names-checker.netlify.app/
+
+## Screenshot
+![Screenshot of the website](https://keepinguptodate.com/pages/2020/05/10-bem-class-names-checker.png)
   
 ## Project setup  
 ```  
