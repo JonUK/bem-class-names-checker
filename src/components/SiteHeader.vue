@@ -1,7 +1,7 @@
 <template>
 
   <header class="site-header">
-    <h1 class="site-header__title">BEM Class Name Checker</h1>
+    <h1 class="site-header__title">BEM Class Names Checker</h1>
     <p class="site-header__lead">Check for common BEM class name issues</p>
   </header>
 
@@ -37,7 +37,7 @@ export default class SiteHeader extends Vue {
 
   @media screen and (min-width: 25rem) {
     .site-header__title {
-      font-size: 1.8rem;
+      font-size: 1.74rem;
     }
 
     .site-header__lead {

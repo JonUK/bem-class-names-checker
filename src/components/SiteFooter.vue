@@ -12,7 +12,7 @@
     <div class="site-footer__section">
       <h2 class="site-footer__heading">GitHub repo</h2>
       <p>
-        <a href="https://github.com/JonUK/bem-class-name-checker" target="_blank">https://github.com/JonUK/bem-class-name-checker</a>
+        <a href="https://github.com/JonUK/bem-class-names-checker" target="_blank">https://github.com/JonUK/bem-class-names-checker</a>
       </p>
 
       <p>Website written in TypeScript and uses Vue.js.</p>
