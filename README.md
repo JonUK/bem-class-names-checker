@@ -1,7 +1,7 @@
-# bem-class-name-checker  
+# bem-class-names-checker  
  
  ## Demo
- https://bem-class-name-checker.netlify.app/
+ https://bem-class-names-checker.netlify.app/
   
 ## Project setup  
 ```  

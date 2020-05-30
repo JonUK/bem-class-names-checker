@@ -4,7 +4,7 @@
 
     <div class="site-footer__section">
       <h2 class="site-footer__heading">What is this site?</h2>
-      <p>BEM Class Name Checker is an online tool to check if BEM class names are valid and check them for common naming issues.</p>
+      <p>BEM Class Names Checker is an online tool to check if BEM class names are valid and check them for common naming issues.</p>
       <p>The BEM (Block, Element, Modifier) methodology for naming CSS styles lends itself well for large websites composed of lots of independent modules but can be confusing until you are familiar with it.</p>
       <p>I hope this online tool will help as a way of experimenting with BEM as well as validating existing stylesheets.</p>
     </div>

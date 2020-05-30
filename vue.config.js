@@ -1,8 +1,8 @@
 module.exports = {
   pwa: {
-    name: 'BEM Class Name Checker',
+    name: 'BEM Class Names Checker',
     manifestOptions: {
-      short_name: 'BEM CSS Checker'
+      short_name: 'BEM Checker'
     }
   }
 };
